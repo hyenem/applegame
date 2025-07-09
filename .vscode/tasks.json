@@ -33,7 +33,8 @@
         "-LC:/Users/student/Desktop/SFML-3.0.0/lib",
         "-lsfml-system",
         "-lsfml-window",
-        "-lsfml-graphics"
+        "-lsfml-graphics",
+        "-lsfml-audio"
       ],
       "group": "build",
       "problemMatcher": ["$gcc"]
