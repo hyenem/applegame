@@ -38,7 +38,7 @@ void fill_board(std::vector<std::vector<Fruit>>& board, double ratio = 0.2) {
 
     for (int col = 0; col < cols; ++col) {
         for (int row = 0; row < rows; ++row) {
-            board[col][row].type = 1 + (int) (type_dist(gen) <= ratio);
+            board[col][row].type = 1 + (int)(type_dist(gen) <= ratio);
             board[col][row].number = number_dist(gen);
             board[col][row].shape = CircleShape(radius);
             board[col][row].shape.setFillColor(Color::Red);
@@ -51,24 +51,24 @@ void fill_board(std::vector<std::vector<Fruit>>& board, double ratio = 0.2) {
     }
 }
 
-int fruit_pop(vector<vector<Fruit>>& board, int s_col, int s_row, int e_col, int e_row){
-    std:: cout<< s_col <<", " << s_row <<", " << e_col <<", " << e_row << std::endl;
+int fruit_pop(vector<vector<Fruit>>& board, int s_col, int s_row, int e_col, int e_row) {
+    std::cout << s_col << ", " << s_row << ", " << e_col << ", " << e_row << std::endl;
     int score = 0;
     int num_sum = 0;
     int min_type = 2;
     for (int col = s_col; col <= e_col && num_sum <= 10; ++col) {
         for (int row = s_row; row <= e_row && num_sum <= 10; ++row) {
             num_sum += board[col][row].number;
-            if(board[col][row].type){
+            if (board[col][row].type) {
                 score++;
-                if (board[col][row].type < min_type){
+                if (board[col][row].type < min_type) {
                     min_type = board[col][row].type;
                 }
             }
         }
     }
 
-    if(num_sum == 10){
+    if (num_sum == 10) {
         for (int col = s_col; col <= e_col && num_sum <= 10; ++col) {
             for (int row = s_row; row <= e_row && num_sum <= 10; ++row) {
                 board[col][row].type = 0;
@@ -82,7 +82,7 @@ int fruit_pop(vector<vector<Fruit>>& board, int s_col, int s_row, int e_col, int
 }
 
 int main() {
-    RenderWindow window(VideoMode({1200u, 800u}), "Fruit Board - SFML 3.0");
+    RenderWindow window(VideoMode({ 1200u, 800u }), "Fruit Board - SFML 3.0");
     window.setFramerateLimit(60);
 
     Font font;
@@ -91,8 +91,7 @@ int main() {
         return -1;
     }
 
-
-    int minx=11, miny=18, maxx=-1, maxy=-1;
+    int minx = 11, miny = 18, maxx = -1, maxy = -1;
 
     int rows = 17;
     int cols = 10;
@@ -101,9 +100,7 @@ int main() {
     int score = 0;
 
     vector<vector<Fruit>> board(cols, vector<Fruit>(rows));
-
     fill_board(board, lemon_ratio);
-
 
     bool selecting = false;
     Vector2f startPos;
@@ -111,6 +108,21 @@ int main() {
     selectionBox.setFillColor(Color(0, 0, 255, 50));
     selectionBox.setOutlineColor(Color::Blue);
     selectionBox.setOutlineThickness(1);
+
+    bool gameStarted = false;
+
+    RectangleShape startButton(Vector2f(200.f, 60.f));
+    startButton.setFillColor(Color::Green);
+    startButton.setPosition(Vector2f(950.f, 700.f)); // Vector2f로 전달
+
+    Text startText(font);
+    startText.setCharacterSize(24);
+    startText.setFillColor(Color::White);
+
+    Text scoreText(font);
+    scoreText.setCharacterSize(28);
+    scoreText.setFillColor(Color::Black);
+    scoreText.setPosition(Vector2f(950.f, 50.f)); // 오른쪽 위 위치
 
     while (window.isOpen()) {
         while (const std::optional<Event> event = window.pollEvent()) {
@@ -120,34 +132,47 @@ int main() {
 
             if (const auto* mousePress = event->getIf<Event::MouseButtonPressed>()) {
                 if (mousePress->button == Mouse::Button::Left) {
-                    selecting = true;
-                    startPos = window.mapPixelToCoords(Mouse::getPosition(window));
-                    selectionBox.setPosition(startPos);
-                    selectionBox.setSize(Vector2f(0, 0));
+                    Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
+                    if (startButton.getGlobalBounds().contains(mousePos)) {
+                        if (!gameStarted) {
+                            gameStarted = true;
+                            score = 0;
+                        } else {
+                            gameStarted = false;
+                            score = 0;
+                            fill_board(board, lemon_ratio);
+                        }
+                    } else if (gameStarted) {
+                        selecting = true;
+                        startPos = mousePos;
+                        selectionBox.setPosition(startPos);
+                        selectionBox.setSize(Vector2f(0, 0));
+                    }
                 }
             }
 
             if (const auto* mouseRelease = event->getIf<Event::MouseButtonReleased>()) {
                 if (mouseRelease->button == Mouse::Button::Left) {
                     selecting = false;
-                    fruit_pop(board, minx, miny, maxx, maxy);
-                    minx=11, miny=18, maxx=-1, maxy=-1;
-                    for (int i = 0; i < 10; i++) {
-                        for (int j = 0; j < 17; j++) {
-                            Fruit& f = board[i][j];
-                            f.shape.setFillColor(Color::Red);
+                    if (gameStarted) {
+                        score += fruit_pop(board, minx, miny, maxx, maxy);
+                        minx = 11, miny = 18, maxx = -1, maxy = -1;
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 17; j++) {
+                                Fruit& f = board[i][j];
+                                f.shape.setFillColor(Color::Red);
+                            }
                         }
                     }
                 }
             }
         }
 
-        if (selecting) {
+        if (selecting && gameStarted) {
             Vector2f currentPos = window.mapPixelToCoords(Mouse::getPosition(window));
             Vector2f size(currentPos - startPos);
             selectionBox.setSize(size);
 
-            
             FloatRect selectionBounds(selectionBox.getGlobalBounds());
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 17; j++) {
@@ -166,32 +191,48 @@ int main() {
             }
         }
 
+        scoreText.setString("Score: " + std::to_string(score));
+
+        startText.setString(gameStarted ? "END" : "START");
+        auto textBounds = startText.getLocalBounds();
+        startText.setOrigin(textBounds.position + textBounds.size / 2.f);
+        startText.setPosition(Vector2f(
+            startButton.getPosition().x + startButton.getSize().x / 2.f,
+            startButton.getPosition().y + startButton.getSize().y / 2.f
+        ));
+
         window.clear(Color::White);
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 17; j++) {
-                Fruit& f = board[i][j];
-                if(f.number!=0){
-                    window.draw(f.shape);
+        if (gameStarted) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 17; j++) {
+                    Fruit& f = board[i][j];
+                    if (f.number != 0) {
+                        window.draw(f.shape);
 
-                    Text text(font);
-                    text.setString(std::to_string(f.number));
-                    text.setCharacterSize(14);
-                    text.setFillColor(Color::White);
+                        Text text(font);
+                        text.setString(std::to_string(f.number));
+                        text.setCharacterSize(14);
+                        text.setFillColor(Color::White);
 
-                    auto bounds = text.getLocalBounds();
-                    text.setOrigin(bounds.position + bounds.size / 2.f);
-                    text.setPosition(f.shape.getPosition());
+                        auto bounds = text.getLocalBounds();
+                        text.setOrigin(bounds.position + bounds.size / 2.f);
+                        text.setPosition(f.shape.getPosition());
 
-                    window.draw(text);
-
+                        window.draw(text);
+                    }
                 }
             }
+
+            window.draw(scoreText);
         }
 
-        if (selecting) {
+        if (selecting && gameStarted) {
             window.draw(selectionBox);
         }
+
+        window.draw(startButton);
+        window.draw(startText);
 
         window.display();
     }
