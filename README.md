@@ -115,18 +115,14 @@ Copy-Item .\SFML-3.0.0\bin\*.dll .\
 ---
 
 ## 🔧 기술 스택
-<p>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" width="40" height="40"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/SFML_Logo.svg" width="40" height="40"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="40" height="40"/>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="40" height="40"/>
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" width="50"/>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/SFML_Logo.svg" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="50"/>
 </p>
 
-- **C++17**
-- **SFML 3.0**
-- **Visual Studio Code**
-- **Windows 10**
-- **MinGW 64-bit**
+**C++17**, **SFML 3.0**, **VS Code**, **Windows 10**, **MinGW**
 
 ---
 
