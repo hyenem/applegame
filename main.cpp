@@ -95,12 +95,13 @@ int main() {
 
     int rows = 17;
     int cols = 10;
-    double lemon_ratio = 0.5;
+    double lemonRatio = 0;
 
     int score = 0;
+    Clock gameTimer;
+    float timeLimit = 20.;
 
     vector<vector<Fruit>> board(cols, vector<Fruit>(rows));
-    fill_board(board, lemon_ratio);
 
     bool selecting = false;
     Vector2f startPos;
@@ -123,6 +124,11 @@ int main() {
     scoreText.setCharacterSize(28);
     scoreText.setFillColor(Color::Black);
     scoreText.setPosition(Vector2f(950.f, 50.f)); // 오른쪽 위 위치
+    
+    Text timerText(font);
+    timerText.setCharacterSize(28);
+    timerText.setFillColor(Color::Red);
+    timerText.setPosition(Vector2f(950.f, 100.f)); // 오른쪽 위 위치
 
     while (window.isOpen()) {
         while (const std::optional<Event> event = window.pollEvent()) {
@@ -136,11 +142,14 @@ int main() {
                     if (startButton.getGlobalBounds().contains(mousePos)) {
                         if (!gameStarted) {
                             gameStarted = true;
+                            gameTimer.restart();
                             score = 0;
+                            fill_board(board, lemonRatio);
                         } else {
                             gameStarted = false;
                             score = 0;
-                            fill_board(board, lemon_ratio);
+                            gameTimer.restart();
+                            fill_board(board, lemonRatio);
                         }
                     } else if (gameStarted) {
                         selecting = true;
@@ -190,7 +199,13 @@ int main() {
                 }
             }
         }
-
+        float gameTimeRemain = timeLimit - gameTimer.getElapsedTime().asSeconds();
+        if (gameTimeRemain < 0){
+            gameStarted = false;
+            selecting = false;
+            gameTimer.stop();
+        }
+        timerText.setString("Time: " + std::to_string((int) gameTimeRemain));
         scoreText.setString("Score: " + std::to_string(score));
 
         startText.setString(gameStarted ? "END" : "START");
@@ -225,6 +240,7 @@ int main() {
             }
 
             window.draw(scoreText);
+            window.draw(timerText);
         }
 
         if (selecting && gameStarted) {
