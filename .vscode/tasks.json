@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build SFML app",
+      "type": "shell",
+      "command": "C:/Users/student/Desktop/mingw64/bin/g++.exe",
+      "args": [
+        "C:/Users/student/Desktop/applegame/tmp/test.cpp",
+        "-o",
+        "C:/Users/student/Desktop/applegame/tmp/test.exe",
+        "-std=c++17",
+        "-IC:/Users/student/Desktop/SFML-3.0.0/include",
+        "-LC:/Users/student/Desktop/SFML-3.0.0/lib",
+        "-lsfml-system",
+        "-lsfml-window",
+        "-lsfml-graphics"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}
