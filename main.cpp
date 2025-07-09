@@ -100,7 +100,7 @@ int main() {
         return -1;
     }
 
-    
+    int tempScore;    
 
     int rows = 17;
     int cols = 10;
@@ -108,13 +108,21 @@ int main() {
 
     int minx = cols + 1, miny = rows + 1, maxx = -1, maxy = -1;
     sf::Music music;
-
     if (!music.openFromFile("apple_bgm.wav")){
         return -1;
     }
 
-    music.play();
-    music.setLooping(true);
+
+    sf::Music gameOverMusic;
+    if (!gameOverMusic.openFromFile("game_over.wav")){
+        return -1;
+    }
+    
+    sf::SoundBuffer scoreBuffer1("tap.wav");
+    sf::Sound scoreSound1(scoreBuffer1);
+
+    sf::SoundBuffer scoreBuffer2("drum.wav");
+    sf::Sound scoreSound2(scoreBuffer2);
 
     int score = -1;
     Clock gameTimer;
@@ -165,11 +173,14 @@ int main() {
                             gameTimer.restart();
                             score = 0;
                             fill_board(board, lemonRatio);
+                            
+                            music.play();
+                            music.setLooping(true);
                         } else {
                             gameStarted = false;
-                            score = 0;
-                            gameTimer.restart();
-                            fill_board(board, lemonRatio);
+                            gameTimer.stop();
+
+                            music.stop();
                         }
                     } else if (gameStarted) {
                         selecting = true;
@@ -184,7 +195,13 @@ int main() {
                 if (mouseRelease->button == Mouse::Button::Left) {
                     selecting = false;
                     if (gameStarted) {
-                        score += fruit_pop(board, minx, miny, maxx, maxy);
+                        tempScore = fruit_pop(board, minx, miny, maxx, maxy);
+                        if(tempScore > 0){
+                            scoreSound2.play();
+                        } else{
+                            scoreSound1.play();
+                        }
+                        score += tempScore;
                         minx = 11, miny = 18, maxx = -1, maxy = -1;
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < 17; j++) {
@@ -220,10 +237,14 @@ int main() {
             }
         }
         float gameTimeRemain = timeLimit - gameTimer.getElapsedTime().asSeconds();
-        if (gameTimeRemain < 0){
+        if (gameTimeRemain < 0 && gameStarted){
             gameStarted = false;
             selecting = false;
+
             gameTimer.stop();
+            music.stop();
+
+            gameOverMusic.play();
         }
         timerText.setString("Time: " + std::to_string((int) gameTimeRemain));
         scoreText.setString("Score: " + std::to_string(score));
