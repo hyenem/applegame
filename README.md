@@ -78,6 +78,9 @@ SCSA 24기 C/C++ 프로젝트 2조
  ├── FruitGame.exe (빌드 후)
  ├── Roboto-VariableFont_wdth,wght.ttf
  ├── apple_bgm.wav
+ ├── drum.wav
+ ├── game_over.wav
+ ├── tap.wav
  ├── SFML-3.0.0/
  │   ├── include/
  │   ├── lib/
