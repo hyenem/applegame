@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <optional>
 #include <algorithm>
@@ -99,11 +100,21 @@ int main() {
         return -1;
     }
 
-    int minx = 11, miny = 18, maxx = -1, maxy = -1;
+    
 
     int rows = 17;
     int cols = 10;
     double lemonRatio = 0.33;
+
+    int minx = cols + 1, miny = rows + 1, maxx = -1, maxy = -1;
+    sf::Music music;
+
+    if (!music.openFromFile("apple_bgm.wav")){
+        return -1;
+    }
+
+    music.play();
+    music.setLooping(true);
 
     int score = -1;
     Clock gameTimer;
