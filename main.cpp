@@ -27,6 +27,13 @@ public:
     }
 };
 
+void colorFruit(Fruit& f){
+    if(f.type == 1){
+        f.shape.setFillColor(Color::Red);
+    } else {
+        f.shape.setFillColor(Color::Magenta);
+    }
+}
 void fill_board(std::vector<std::vector<Fruit>>& board, double ratio = 0.2) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -81,13 +88,6 @@ int fruit_pop(vector<vector<Fruit>>& board, int s_row, int s_col, int e_row, int
     }
 }
 
-void colorFruit(Fruit& f){
-    if(f.type == 1){
-        f.shape.setFillColor(Color::Red);
-    } else {
-        f.shape.setFillColor(Color::Magenta);
-    }
-}
 
 int main() {
     RenderWindow window(VideoMode({ 1200u, 800u }), "Fruit Board - SFML 3.0");
@@ -103,12 +103,13 @@ int main() {
 
     int rows = 17;
     int cols = 10;
-    double lemon_ratio = 0.33;
+    double lemonRatio = 0.33;
 
-    int score = 0;
+    int score = -1;
+    Clock gameTimer;
+    float timeLimit = 20.;
 
     vector<vector<Fruit>> board(cols, vector<Fruit>(rows));
-    fill_board(board, lemon_ratio);
 
     bool selecting = false;
     Vector2f startPos;
@@ -130,7 +131,13 @@ int main() {
     Text scoreText(font);
     scoreText.setCharacterSize(28);
     scoreText.setFillColor(Color::Black);
-    scoreText.setPosition(Vector2f(950.f, 50.f));
+    scoreText.setPosition(Vector2f(700.f, 10.f));
+
+
+    Text timerText(font);
+    timerText.setCharacterSize(28);
+    timerText.setFillColor(Color::Red);
+    timerText.setPosition(Vector2f(950.f, 10.f)); // 오른쪽 위 위치
 
     while (window.isOpen()) {
         while (const std::optional<Event> event = window.pollEvent()) {
@@ -144,11 +151,14 @@ int main() {
                     if (startButton.getGlobalBounds().contains(mousePos)) {
                         if (!gameStarted) {
                             gameStarted = true;
+                            gameTimer.restart();
                             score = 0;
+                            fill_board(board, lemonRatio);
                         } else {
                             gameStarted = false;
                             score = 0;
-                            fill_board(board, lemon_ratio);
+                            gameTimer.restart();
+                            fill_board(board, lemonRatio);
                         }
                     } else if (gameStarted) {
                         selecting = true;
@@ -198,7 +208,13 @@ int main() {
                 }
             }
         }
-
+        float gameTimeRemain = timeLimit - gameTimer.getElapsedTime().asSeconds();
+        if (gameTimeRemain < 0){
+            gameStarted = false;
+            selecting = false;
+            gameTimer.stop();
+        }
+        timerText.setString("Time: " + std::to_string((int) gameTimeRemain));
         scoreText.setString("Score: " + std::to_string(score));
 
         startText.setString(gameStarted ? "END" : "START");
@@ -233,6 +249,7 @@ int main() {
             }
 
             window.draw(scoreText);
+            window.draw(timerText);
         }
 
         if (selecting && gameStarted) {
@@ -241,6 +258,19 @@ int main() {
 
         window.draw(startButton);
         window.draw(startText);
+
+        if(!gameStarted){
+            Text resultText(font);
+            resultText.setCharacterSize(28);
+            resultText.setFillColor(Color::Black);
+            resultText.setPosition(Vector2f(400.f, 350.f));
+            if(score==-1){
+                resultText.setString("Let's Start");
+            } else {
+                resultText.setString("Result : " + std::to_string(score));
+            }
+            window.draw(resultText);
+        }
 
         window.display();
     }
