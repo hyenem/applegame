@@ -6,6 +6,8 @@
 #include <random>
 #include <vector>
 #include <windows.h>
+#include <SFML/Audio.hpp>
+
 
 using namespace sf;
 using std::vector;
@@ -107,7 +109,7 @@ int main() {
 
     int score = -1;
     Clock gameTimer;
-    float timeLimit = 20.;
+    float timeLimit = 60.;
 
     vector<vector<Fruit>> board(cols, vector<Fruit>(rows));
 
