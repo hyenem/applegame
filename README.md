@@ -129,13 +129,12 @@ Copy-Item .\SFML-3.0.0\bin\*.dll .\
 
 ---
 
-## 🔧 기술 스택 (아이콘)
-| | |
-|------|------|
-| ![C++](https://img.shields.io/badge/C++-00599C?logo=c%2B%2B&logoColor=white) | C++17 |
-| ![SFML](https://img.shields.io/badge/SFML-008080?logo=SFML&logoColor=white) | SFML 3.0.0 |
-| ![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?logo=Visual%20Studio%20Code&logoColor=white) | Visual Studio Code |
-| ![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) | Windows 10 |
-| ![MinGW](https://img.shields.io/badge/MinGW-GCC%20Compiler-00599C?logo=gnu&logoColor=white) | MinGW 64-bit |
+## 🔧 기술 스택
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" width="50"/>
+  <img src="https://www.sfml-dev.org/download/goodies/sfml-icon-mini.png" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="50"/>
+</p>
 
----
+**C++17**, **SFML 3.0**, **VS Code**, **Windows 10**, **MinGW**
