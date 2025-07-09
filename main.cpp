@@ -33,51 +33,59 @@ void fill_board(std::vector<std::vector<Fruit>>& board, double ratio = 0.2) {
     std::uniform_real_distribution<double> type_dist(0, 1);
     std::uniform_int_distribution<int> number_dist(1, 9);
 
-    int cols = board.size();
-    int rows = board[0].size();
+    int rows = board.size();
+    int cols = board[0].size();
 
-    for (int col = 0; col < cols; ++col) {
-        for (int row = 0; row < rows; ++row) {
-            board[col][row].type = 1 + (int)(type_dist(gen) <= ratio);
-            board[col][row].number = number_dist(gen);
-            board[col][row].shape = CircleShape(radius);
-            board[col][row].shape.setFillColor(Color::Red);
-            board[col][row].shape.setOrigin(Vector2f(radius, radius));
-            board[col][row].shape.setPosition(Vector2f(
-                offsetX + row * spacingX,
-                offsetY + col * spacingY
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            Fruit& f = board[row][col];
+            f.type = 1 + (int)(type_dist(gen) <= ratio);
+            f.number = number_dist(gen);
+            f.shape = CircleShape(radius);
+            colorFruit(f);
+            board[row][col].shape.setOrigin(Vector2f(radius, radius));
+            board[row][col].shape.setPosition(Vector2f(
+                offsetX + col * spacingX,
+                offsetY + row * spacingY + 70
             ));
         }
     }
 }
 
-int fruit_pop(vector<vector<Fruit>>& board, int s_col, int s_row, int e_col, int e_row) {
-    std::cout << s_col << ", " << s_row << ", " << e_col << ", " << e_row << std::endl;
+int fruit_pop(vector<vector<Fruit>>& board, int s_row, int s_col, int e_row, int e_col) {
     int score = 0;
     int num_sum = 0;
     int min_type = 2;
-    for (int col = s_col; col <= e_col && num_sum <= 10; ++col) {
-        for (int row = s_row; row <= e_row && num_sum <= 10; ++row) {
-            num_sum += board[col][row].number;
-            if (board[col][row].type) {
+    for (int row = s_row; row <= e_row && num_sum <= 10; ++row) {
+        for (int col = s_col; col <= e_col && num_sum <= 10; ++col) {
+            num_sum += board[row][col].number;
+            if (board[row][col].type) {
                 score++;
-                if (board[col][row].type < min_type) {
-                    min_type = board[col][row].type;
+                if (board[row][col].type < min_type) {
+                    min_type = board[row][col].type;
                 }
             }
         }
     }
 
     if (num_sum == 10) {
-        for (int col = s_col; col <= e_col && num_sum <= 10; ++col) {
-            for (int row = s_row; row <= e_row && num_sum <= 10; ++row) {
-                board[col][row].type = 0;
-                board[col][row].number = 0;
+        for (int row = s_row; row <= e_row && num_sum <= 10; ++row) {
+            for (int col = s_col; col <= e_col && num_sum <= 10; ++col) {
+                board[row][col].type = 0;
+                board[row][col].number = 0;
             }
         }
         return score * min_type;
     } else {
         return 0;
+    }
+}
+
+void colorFruit(Fruit& f){
+    if(f.type == 1){
+        f.shape.setFillColor(Color::Red);
+    } else {
+        f.shape.setFillColor(Color::Magenta);
     }
 }
 
@@ -95,7 +103,7 @@ int main() {
 
     int rows = 17;
     int cols = 10;
-    double lemon_ratio = 0.5;
+    double lemon_ratio = 0.33;
 
     int score = 0;
 
@@ -113,7 +121,7 @@ int main() {
 
     RectangleShape startButton(Vector2f(200.f, 60.f));
     startButton.setFillColor(Color::Green);
-    startButton.setPosition(Vector2f(950.f, 700.f)); // Vector2f로 전달
+    startButton.setPosition(Vector2f(950.f, 700.f));
 
     Text startText(font);
     startText.setCharacterSize(24);
@@ -122,7 +130,7 @@ int main() {
     Text scoreText(font);
     scoreText.setCharacterSize(28);
     scoreText.setFillColor(Color::Black);
-    scoreText.setPosition(Vector2f(950.f, 50.f)); // 오른쪽 위 위치
+    scoreText.setPosition(Vector2f(950.f, 50.f));
 
     while (window.isOpen()) {
         while (const std::optional<Event> event = window.pollEvent()) {
@@ -160,7 +168,7 @@ int main() {
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < 17; j++) {
                                 Fruit& f = board[i][j];
-                                f.shape.setFillColor(Color::Red);
+                                colorFruit(f);
                             }
                         }
                     }
@@ -185,7 +193,7 @@ int main() {
                         maxx = std::max(maxx, i);
                         maxy = std::max(maxy, j);
                     } else {
-                        f.shape.setFillColor(Color::Red);
+                        colorFruit(f);
                     }
                 }
             }
@@ -212,7 +220,7 @@ int main() {
 
                         Text text(font);
                         text.setString(std::to_string(f.number));
-                        text.setCharacterSize(14);
+                        text.setCharacterSize(22);
                         text.setFillColor(Color::White);
 
                         auto bounds = text.getLocalBounds();
