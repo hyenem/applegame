@@ -117,7 +117,7 @@ Copy-Item .\SFML-3.0.0\bin\*.dll .\
 ## 🔧 기술 스택
 <p align="left">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" width="50"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/SFML_Logo.svg" width="50"/>
+  <img src="https://www.sfml-dev.org/download/goodies/sfml-icon-mini.png" width="50"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="50"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="50"/>
 </p>
