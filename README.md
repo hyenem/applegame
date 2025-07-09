@@ -124,6 +124,4 @@ Copy-Item .\SFML-3.0.0\bin\*.dll .\
 
 **C++17**, **SFML 3.0**, **VS Code**, **Windows 10**, **MinGW**
 
----
 
-> ⚡ Git Bash 사용 시 빌드 명령어는 `^` 대신 `\` 사용하세요!
