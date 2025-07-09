@@ -7,7 +7,7 @@
         "C:/Users/student/Desktop/SFML-3.0.0/include"
       ],
       "defines": [],
-      "compilerPath": "C:/SCSA/mingw64/bin/gcc.exe",
+      "compilerPath": "C:/Users/student/Desktop/mingw64/bin/gcc.exe",
       "cStandard": "${default}",
       "cppStandard": "${default}",
       "intelliSenseMode": "windows-gcc-x64"

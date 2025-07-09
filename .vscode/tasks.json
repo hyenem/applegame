@@ -6,9 +6,28 @@
       "type": "shell",
       "command": "C:/Users/student/Desktop/mingw64/bin/g++.exe",
       "args": [
-        "C:/Users/student/Desktop/applegame/tmp/test.cpp",
+        // 현재파일
+        "${file}",
+                      
+        // 현재폴더모든파일
+        // "*.cpp",
+
+        // 특정파일
+        // "-I Student.h",
+        // "${fileDirname}\\Main01.cpp",
+        // "${fileDirname}\\Student.cpp",
+
+        //현재와하위특정폴더
+        // "-I${fileDirname}\\trans ",
+        // "-I${fileDirname}\\animal ",
+        // "${fileDirname}\\animal\\*.cpp",
+        // "${fileDirname}\\trans\\*.cpp",
+        //"*.cpp",
+
+        // 모든파일
+        //"/C dir /S /B ${fileDirname}\\animal\\*.cpp ${fileDirname}\\trans\\*.cpp ${fileDirname}\\*.cpp > file_list.txt && C:/ssafy/c/mingw/bin/g++.exe -fdiagnostics-color=always -g -o ${fileDirname}\\main.exe @file_list.txt",
         "-o",
-        "C:/Users/student/Desktop/applegame/tmp/test.exe",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe",
         "-std=c++17",
         "-IC:/Users/student/Desktop/SFML-3.0.0/include",
         "-LC:/Users/student/Desktop/SFML-3.0.0/lib",
