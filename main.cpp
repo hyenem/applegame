@@ -169,9 +169,7 @@ int main() {
                             fill_board(board, lemonRatio);
                         } else {
                             gameStarted = false;
-                            score = 0;
-                            gameTimer.restart();
-                            fill_board(board, lemonRatio);
+                            gameTimer.stop();
                         }
                     } else if (gameStarted) {
                         selecting = true;
